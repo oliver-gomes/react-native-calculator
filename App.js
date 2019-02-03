@@ -6,10 +6,12 @@ import { Feather } from "@expo/vector-icons";
 
 export default class App extends React.Component {
   state = {
+    value: null,
     displayValue: "0",
     colorView: true,
     waitingForOperand: false,
-    operator: null
+    operator: null,
+    bts: " "
   };
 
   inputDigit = digit => {
@@ -52,7 +54,8 @@ export default class App extends React.Component {
 
   clearDisplay = () => {
     this.setState({
-      displayValue: "0"
+      displayValue: "0",
+      bts: " "
     });
   };
 
@@ -75,9 +78,37 @@ export default class App extends React.Component {
     });
   };
 
-  performOperation = operator => {
+  performOperation = nextOperator => {
+    const { displayValue, operator, value } = this.state;
+
+    const nextValue = parseFloat(displayValue);
+
+    const operations = {
+      "/": (prevValue, nextValue) => prevValue / nextValue,
+      x: (prevValue, nextValue) => prevValue * nextValue,
+      "+": (prevValue, nextValue) => prevValue + nextValue,
+      "-": (prevValue, nextValue) => prevValue - nextValue,
+      "=": (prevValue, nextValue) => nextValue
+    };
+
+    if (value == null) {
+      this.setState({
+        value: nextValue
+      });
+    } else if (operator) {
+      const currentValue = value || 0;
+      const computedValue = operations[operator](currentValue, nextValue);
+
+      this.setState({
+        value: computedValue,
+        displayValue: String(computedValue),
+        bts: operator === "=" ? " " : `${currentValue} ${operator} ${nextValue}`
+      });
+    }
+
     this.setState({
-      waitingForOperand: true
+      waitingForOperand: true,
+      operator: nextOperator
     });
   };
 
@@ -114,7 +145,13 @@ export default class App extends React.Component {
                 style={{ bottom: 100, paddingLeft: 20 }}
               />
             )}
-
+            <Text
+              style={
+                this.state.colorView ? styles.numberBTS : styles.numberBTSL
+              }
+            >
+              {this.state.bts}
+            </Text>
             <Text style={styles.number}>{displayValue}</Text>
           </View>
         </LinearGradient>
@@ -219,7 +256,11 @@ export default class App extends React.Component {
 
           <View style={styles.row}>
             <View style={styles.zeroButton}>
-              <Btn text="0" colorText={this.state.colorView} keyValue />
+              <Btn
+                text="0"
+                colorText={this.state.colorView}
+                onPress={() => this.inputDigit(0)}
+              />
             </View>
 
             <Btn
@@ -236,7 +277,10 @@ export default class App extends React.Component {
               start={[0.1, 0.1]}
               end={[1, 1]}
             >
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.performOperation("=")}
+              >
                 <Text
                   style={{ color: "#fff", fontSize: 36 }}
                   colorText={this.state.colorView}
@@ -265,7 +309,7 @@ const styles = StyleSheet.create({
     // borderColor: "#19153E"
   },
   top: {
-    paddingTop: 150
+    paddingTop: 120
   },
   bottom: {
     flex: 1
@@ -284,5 +328,17 @@ const styles = StyleSheet.create({
   },
   zeroButton: {
     flexGrow: 2
+  },
+  numberBTS: {
+    color: "#6191FF",
+    textAlign: "right",
+    padding: 10,
+    fontSize: 26
+  },
+  numberBTSL: {
+    color: "#FDFCFC",
+    textAlign: "right",
+    padding: 10,
+    fontSize: 26
   }
 });
