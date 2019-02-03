@@ -133,7 +133,7 @@ export default class App extends React.Component {
                 color="#fff"
                 onPress={this.toggleColor}
                 colorText={this.state.colorView}
-                style={{ bottom: 100, paddingLeft: 20 }}
+                style={{ bottom: 90, paddingLeft: 20 }}
               />
             ) : (
               <Feather
@@ -142,7 +142,7 @@ export default class App extends React.Component {
                 color="#575757"
                 onPress={this.toggleColor}
                 colorText={this.state.colorView}
-                style={{ bottom: 100, paddingLeft: 20 }}
+                style={{ bottom: 90, paddingLeft: 20 }}
               />
             )}
             <Text
@@ -255,13 +255,12 @@ export default class App extends React.Component {
           </View>
 
           <View style={styles.row}>
-            <View style={styles.zeroButton}>
-              <Btn
-                text="0"
-                colorText={this.state.colorView}
-                onPress={() => this.inputDigit(0)}
-              />
-            </View>
+            <Btn
+              text="0"
+              colorText={this.state.colorView}
+              onPress={() => this.inputDigit(0)}
+              zero
+            />
 
             <Btn
               text="."
@@ -269,6 +268,7 @@ export default class App extends React.Component {
               onPress={this.inputDot}
             />
             <LinearGradient
+              style={styles.button}
               colors={
                 this.state.colorView
                   ? ["#6191FF", "#4439A7"]
@@ -278,7 +278,7 @@ export default class App extends React.Component {
               end={[1, 1]}
             >
               <TouchableOpacity
-                style={styles.button}
+                // style={styles.button}
                 onPress={() => this.performOperation("=")}
               >
                 <Text
@@ -323,11 +323,7 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 40
-  },
-  zeroButton: {
-    flexGrow: 2
+    justifyContent: "center"
   },
   numberBTS: {
     color: "#6191FF",
