@@ -7,21 +7,39 @@ import { Feather } from "@expo/vector-icons";
 export default class App extends React.Component {
   state = {
     displayValue: "0",
-    colorView: true
+    colorView: true,
+    waitingForOperand: false,
+    operator: null
   };
 
   inputDigit = digit => {
-    const { displayValue } = this.state;
-    this.setState({
-      displayValue: displayValue === "0" ? String(digit) : displayValue + digit
-    });
+    const { displayValue, waitingForOperand } = this.state;
+
+    if (waitingForOperand) {
+      this.setState({
+        displayValue: String(digit),
+        waitingForOperand: false
+      });
+    } else {
+      this.setState({
+        displayValue:
+          displayValue === "0" ? String(digit) : displayValue + digit
+      });
+    }
   };
 
   inputDot = () => {
-    const { displayValue } = this.state;
-    if (displayValue.indexOf(".") === -1) {
+    const { displayValue, waitingForOperand } = this.state;
+
+    if (waitingForOperand) {
       this.setState({
-        displayValue: displayValue + "."
+        displayValue: ".",
+        waitingForOperand: false
+      });
+    } else if (displayValue.indexOf(".") === -1) {
+      this.setState({
+        displayValue: displayValue + ".",
+        waitingForOperand: false
       });
     }
   };
@@ -54,6 +72,12 @@ export default class App extends React.Component {
     const value = parseFloat(displayValue);
     this.setState({
       displayValue: String(value / 100)
+    });
+  };
+
+  performOperation = operator => {
+    this.setState({
+      waitingForOperand: true
     });
   };
 
@@ -119,7 +143,11 @@ export default class App extends React.Component {
               colorText={this.state.colorView}
               onPress={this.inputPercent}
             />
-            <Btn text="/" colorText={this.state.colorView} />
+            <Btn
+              text="/"
+              colorText={this.state.colorView}
+              onPress={() => this.performOperation("/")}
+            />
           </View>
 
           <View style={styles.row}>
@@ -138,7 +166,11 @@ export default class App extends React.Component {
               onPress={() => this.inputDigit(9)}
               colorText={this.state.colorView}
             />
-            <Btn text="X" colorText={this.state.colorView} />
+            <Btn
+              text="x"
+              colorText={this.state.colorView}
+              onPress={() => this.performOperation("x")}
+            />
           </View>
           <View style={styles.row}>
             <Btn
@@ -156,7 +188,11 @@ export default class App extends React.Component {
               onPress={() => this.inputDigit(6)}
               colorText={this.state.colorView}
             />
-            <Btn text="-" colorText={this.state.colorView} />
+            <Btn
+              text="-"
+              colorText={this.state.colorView}
+              onPress={() => this.performOperation("-")}
+            />
           </View>
           <View style={styles.row}>
             <Btn
@@ -174,7 +210,11 @@ export default class App extends React.Component {
               onPress={() => this.inputDigit(3)}
               colorText={this.state.colorView}
             />
-            <Btn text="+" colorText={this.state.colorView} />
+            <Btn
+              text="+"
+              colorText={this.state.colorView}
+              onPress={() => this.performOperation("+")}
+            />
           </View>
 
           <View style={styles.row}>
