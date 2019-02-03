@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const Btn = ({ text, colorText, onPress, keyValue }) => {
+const Btn = ({ text, colorText, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Text style={colorText ? styles.textLight : styles.textDark}>{text}</Text>
