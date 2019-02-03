@@ -51,7 +51,7 @@ export default class App extends React.Component {
 
   inputPercent = () => {
     const { displayValue } = this.state;
-    const value = paresFloat(displayValue);
+    const value = parseFloat(displayValue);
     this.setState({
       displayValue: String(value / 100)
     });
