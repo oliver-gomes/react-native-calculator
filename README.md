@@ -13,6 +13,10 @@ Scan the QR code from the above link with your Expo App with Android/Iphone
 ![project image](https://oliver-gomes.github.io/images/github%20images/calculator-instagra.png)
 
 
+
+
+
+![project image](https://oliver-gomes.github.io/images/github%20images/Calculator.mp4)
 ### How to Load the App
 ```
 git clone https://github.com/oliver-gomes/react-native-calculator.git
