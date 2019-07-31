@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "eject": "expo eject"
   },
-  "name": "Calculator App",
+  "name": "Calculator-App",
   "dependencies": {
     "eslint": "^5.13.0",
     "expo": "^32.0.0",
